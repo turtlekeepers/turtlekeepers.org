@@ -8,10 +8,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [ "20" ]
-
     permissions:
       contents: write
 
@@ -23,8 +19,11 @@ jobs:
         with:
           node-version: "20"
 
-      - run: npm ci
-      - run: npm run build:githubpages
+      - name: Install packages
+        run: npm ci
+
+      - name: Build
+        run: npm run build:githubpages
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4 # https://github.com/peaceiris/actions-gh-pages
