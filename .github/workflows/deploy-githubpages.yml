@@ -7,6 +7,14 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [ "20" ]
+
+    permissions:
+      contents: write
+
     steps:
       - uses: actions/checkout@v4
 
