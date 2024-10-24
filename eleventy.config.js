@@ -5,7 +5,7 @@ const outputDir = "dist"; // default: "_site"
 const layoutsDir = "_layouts"; // default: "_layouts" (`input` relative)
 
 export default async function(eleventyConfig) {
-  //eleventyConfig.addPassthroughCopy(`${inputDir}/CNAME`);
+  eleventyConfig.addPassthroughCopy(`${inputDir}/robots.txt`);
 };
 
 export const config = {
