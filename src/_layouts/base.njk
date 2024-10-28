@@ -1,12 +1,13 @@
 ---js
-let siteTitle = "Turtlekeepers";
+
 ---
 <!DOCTYPE html>
 <html lang='en'>
 
 <head>
   <meta charset="utf-8">
-  <title>{% if title %}{{ title }} - {% endif %}{{ siteTitle }}</title>
+  <title>{% if title %}{{ title }} - {% endif %}{{ site.title }}</title>
+  <link rel="stylesheet" href="/assets/css/base.css" />
 </head>
 
 <body>
