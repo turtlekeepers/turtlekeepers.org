@@ -5,6 +5,7 @@ import path from "node:path";
 const inputDir = "src"; // default: "."
 const outputDir = "dist"; // default: "_site"
 const layoutsDir = "_layouts"; // default: "_layouts" (`input` relative)
+const assetsDir = "_assets";
 
 export default async function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy(`${inputDir}/robots.txt`);
@@ -14,7 +15,12 @@ export default async function(eleventyConfig) {
   eleventyConfig.addExtension("scss", {
     outputFileExtension: "css",
     compileOptions: {
-      permalink: function (inputContent, inputPath) {
+      permalink: function (contents, inputPath) {
+        // skip files not in assets
+        if (!inputPath.includes(`/${assetsDir}/`)) {
+          return;
+        }
+
         let re = new RegExp(String.raw`\/${inputDir}\/_`, "g");
 
         return inputPath
@@ -22,7 +28,12 @@ export default async function(eleventyConfig) {
           .replace(/\.scss$/, ".css");
       }
     },
-    compile: function(inputContent, inputPath) {
+    compile: function(contents, inputPath) {
+      // skip files not in assets
+      if (!inputPath.includes(`/${assetsDir}/`)) {
+        return;
+      }
+
       // skip partials (e.g. _normalize.scss)
       if (path.parse(inputPath).base.startsWith("_")) {
         return;
@@ -32,6 +43,7 @@ export default async function(eleventyConfig) {
         let result = sass.compile(inputPath, {
           style: "compressed"
         });
+
         return result.css.toString();
       }
     }
