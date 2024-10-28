@@ -1,0 +1,11 @@
+@use "normalize";
+
+/*! base | MIT License */
+/**
+ * Variables
+ */
+ $color-bg:            #ffffff;
+
+ body {
+  background-color: $color-bg;
+ }
