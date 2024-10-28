@@ -1,5 +1,6 @@
 // https://www.11ty.dev/docs/config/
 import * as sass from "sass";
+import * as terser from "terser";
 import path from "node:path";
 
 const inputDir = "src"; // default: "."
@@ -46,6 +47,37 @@ export default async function(eleventyConfig) {
 
         return result.css.toString();
       }
+    }
+  });
+
+  // JS pipeline
+  eleventyConfig.addTemplateFormats("js");
+  eleventyConfig.addExtension("js", {
+    outputFileExtension: "js",
+    compileOptions: {
+      permalink: function (contents, inputPath) {
+        // skip files not in assets
+        if (!inputPath.includes(`/${assetsDir}/`)) {
+          return;
+        }
+
+        let re = new RegExp(String.raw`\/${inputDir}\/_`, "g");
+
+        return inputPath
+          .replace(re, "/") // changes e.g. "/src/_assets" to "/assets"
+          .replace(/\.js$/, ".js");
+      }
+    },
+    compile: function (contents, inputPath) {
+      // skip files not in assets
+      if (!inputPath.includes(`/${assetsDir}/`)) {
+        return;
+      }
+
+      return async (data) => {
+        let result = await terser.minify(contents);
+        return result.code;
+      };
     }
   });
 };
